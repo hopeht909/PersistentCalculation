@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     lateinit var etDouble : EditText
@@ -22,8 +23,27 @@ class MainActivity : AppCompatActivity() {
         tv = findViewById(R.id.tv)
 
         btMultiply.setOnClickListener {
-          answer =  etDouble.text.toString().toDouble() * etFloat.text.toString().toFloat()
-            tv.text = answer.toString()
+            try {
+                answer = etDouble.text.toString().toDouble() * etFloat.text.toString().toFloat()
+                tv.text = answer.toString()
+            }
+            catch(e : NumberFormatException){
+                Toast.makeText(this, "invalid! please enter a number" ,Toast.LENGTH_LONG).show()
+            }
         }
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putDouble("myAnswer", answer)
+
+}
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+       val answerS= savedInstanceState.getDouble("myAnswer", 0.0)
+        answer= answerS
+        tv.text = answer.toString()
+
+
+    }
+
 }
